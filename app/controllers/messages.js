@@ -17,7 +17,7 @@ module.exports = {
             const messages = body.Body.toUpperCase().split(' ')
             const baseUrl = process.env.COVID_API_BASE
             const dataCountry = await axios.get(baseUrl+'/covid/summary/'+messages[1])
-            if (dataCountry.data === null) {
+            if (dataCountry.data.data === null) {
                 option.body = 'Cannot find country with code ' + messages[1] + '. Please use correct country code'
             } else {
                 switch (messages[0]) {
@@ -35,13 +35,14 @@ module.exports = {
                         break;
                 }    
             }
-            
-            const send = await client.messages.create(option)
-            console.log({send})
+            console.log({option})
+            // const send = await client.messages.create(option)
+            // console.log({send})
     
             return
         } catch (err) {
             console.log({err})
+            return
         }
     }
 }
