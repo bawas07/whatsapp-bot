@@ -15,7 +15,8 @@ module.exports = {
                 body: '',
                 to: body.From
             }
-            const messages = body.Body.split(' ')
+            const messageRaw = body.Body.split(' ')
+            const messages = messageRaw.toUpperCase()
             const baseUrl = process.env.COVID_API_BASE
             console.log({messages, baseUrl})
             const dataCountry = await axios.get(baseUrl+'/covid/summary/'+messages[1])
@@ -27,8 +28,11 @@ module.exports = {
                 case 'DEATHS':
                     option.body = `${messages[1]} Deaths ${dataCountry.data.data.summary.death.toLocaleString()}`
                     break;
+                case 'CURED':
+                    option.body = `${messages[1]} Cured ${dataCountry.data.data.summary.recovered.toLocaleString()}`
+                    break;
                 default:
-                    option.body = 'Format available are [CASES|DEATHS] <space> [COUNTRY CODE|TOTAL]'
+                    option.body = 'Format available are [CASES|DEATHS|CURED] <space> [COUNTRY CODE|TOTAL]'
                     break;
             }
             console.log({option})
