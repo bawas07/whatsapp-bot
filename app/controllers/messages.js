@@ -36,8 +36,8 @@ module.exports = {
                 }    
             }
             console.log({option})
-            // const send = await client.messages.create(option)
-            // console.log({send})
+            const send = await client.messages.create(option)
+            console.log({send})
     
             return
         } catch (err) {
