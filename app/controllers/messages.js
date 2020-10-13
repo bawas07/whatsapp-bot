@@ -8,7 +8,6 @@ module.exports = {
     incoming: async (req, res) => {
         try {
             
-            console.log({req: req.body})
             const body = req.body
             const option = {
                 from: body.To,
@@ -18,9 +17,10 @@ module.exports = {
             const messageRaw = body.Body.split(' ')
             const messages = messageRaw.toUpperCase()
             const baseUrl = process.env.COVID_API_BASE
-            console.log({messages, baseUrl})
             const dataCountry = await axios.get(baseUrl+'/covid/summary/'+messages[1])
-            console.log(dataCountry.data)
+            if (dataCountry.data === null) {
+                option.body = 'Cannot find country with code ' + messages[1] + '. Please use correct country code'
+            }
             switch (messages[0]) {
                 case 'CASES':
                     option.body = `${messages[1]} Active Cases ${dataCountry.data.data.summary.active.toLocaleString()}`
@@ -35,13 +35,12 @@ module.exports = {
                     option.body = 'Format available are [CASES|DEATHS|CURED] <space> [COUNTRY CODE|TOTAL]'
                     break;
             }
-            console.log({option})
             const send = await client.messages.create(option)
             console.log({send})
     
             return
         } catch (err) {
-            console.log(err)
+            console.log({err})
         }
     }
 }
