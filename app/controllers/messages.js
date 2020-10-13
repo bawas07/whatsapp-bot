@@ -19,21 +19,23 @@ module.exports = {
             const dataCountry = await axios.get(baseUrl+'/covid/summary/'+messages[1])
             if (dataCountry.data === null) {
                 option.body = 'Cannot find country with code ' + messages[1] + '. Please use correct country code'
+            } else {
+                switch (messages[0]) {
+                    case 'CASES':
+                        option.body = `${messages[1]} Active Cases ${dataCountry.data.data.summary.active.toLocaleString()}`
+                        break;
+                    case 'DEATHS':
+                        option.body = `${messages[1]} Deaths ${dataCountry.data.data.summary.death.toLocaleString()}`
+                        break;
+                    case 'CURED':
+                        option.body = `${messages[1]} Cured ${dataCountry.data.data.summary.recovered.toLocaleString()}`
+                        break;
+                    default:
+                        option.body = 'Format available are [CASES|DEATHS|CURED] <space> [COUNTRY CODE|TOTAL]'
+                        break;
+                }    
             }
-            switch (messages[0]) {
-                case 'CASES':
-                    option.body = `${messages[1]} Active Cases ${dataCountry.data.data.summary.active.toLocaleString()}`
-                    break;
-                case 'DEATHS':
-                    option.body = `${messages[1]} Deaths ${dataCountry.data.data.summary.death.toLocaleString()}`
-                    break;
-                case 'CURED':
-                    option.body = `${messages[1]} Cured ${dataCountry.data.data.summary.recovered.toLocaleString()}`
-                    break;
-                default:
-                    option.body = 'Format available are [CASES|DEATHS|CURED] <space> [COUNTRY CODE|TOTAL]'
-                    break;
-            }
+            
             const send = await client.messages.create(option)
             console.log({send})
     
