@@ -14,8 +14,7 @@ module.exports = {
                 body: '',
                 to: body.From
             }
-            const messageRaw = body.Body.split(' ')
-            const messages = messageRaw.toUpperCase()
+            const messages = body.Body.toUpperCase().split(' ')
             const baseUrl = process.env.COVID_API_BASE
             const dataCountry = await axios.get(baseUrl+'/covid/summary/'+messages[1])
             if (dataCountry.data === null) {
