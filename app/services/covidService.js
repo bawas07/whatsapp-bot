@@ -27,14 +27,14 @@ module.exports = {
         const dataCountry = await axios.get(baseUrl+'/covid/countries/list?word='+letter[0])
         const countries = [];
         // console.log({res: dataCountry.data})
-        if (dataCountry.data.data.length == 0) {
-            return 'Sorry, we cannot find any countries that begin with '+letter+' in our database'
-        }
         for (let i=1, iLen=dataCountry.data.data.length;i < iLen; i++) {
             const country = dataCountry.data.data[i]
             console.log(country)
             const countryBody = 'Name: '+ country.name + ', Code: ' + country.code_country
             countries.push(countryBody)
+        }
+        if (countries.length < 1) {
+            return 'Sorry, we cannot find any countries that begin with '+letter+' in our database'
         }
         console.log(countries.join('\n'))
         return countries.join('\n')
