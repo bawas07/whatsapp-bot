@@ -28,10 +28,10 @@ module.exports = {
             const send = await client.messages.create(option)
             console.log({send})
     
-            return
+            return res.json({status:'ok'})
         } catch (err) {
             console.log({err})
-            return
+            return res.json({status:'error'})
         }
     }
 }
